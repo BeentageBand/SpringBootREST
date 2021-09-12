@@ -78,11 +78,6 @@ resource "aws_instance" "jenkins" {
   }
 }
 
-provisioner "file" {
-    source      = "${path.cwd}/jenkins-master.sh"
-    destination = "/tmp/jenkins-master.sh"
-}
-
 resource "null_resource" "jenkins-master" {
     depends_on = [aws_instance.jenkins]
   
@@ -92,6 +87,12 @@ resource "null_resource" "jenkins-master" {
       private_key = tls_private_key.private-key.private_key_pem
       host        = aws_instance.jenkins.*.public_dns[0]
     }
+
+    provisioner "file" {
+        source      = "${path.cwd}/jenkins-master.sh"
+        destination = "/tmp/jenkins-master.sh"
+    }
+
 
     provisioner "remote-exec" {
         inline = [
