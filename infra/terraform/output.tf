@@ -4,7 +4,7 @@ output "private-key" {
 }
 
 output "jenkins-password" {
-    value = 
+    value = ""
     sensitive = true
 }
 
