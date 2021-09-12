@@ -78,6 +78,11 @@ resource "aws_instance" "jenkins" {
   }
 }
 
+provisioner "file" {
+    source      = "${path.cwd}/jenkins-master.sh"
+    destination = "/tmp/jenkins-master.sh"
+}
+
 resource "null_resource" "jenkins-master" {
     depends_on = [aws_instance.jenkins]
   
@@ -89,7 +94,9 @@ resource "null_resource" "jenkins-master" {
     }
 
     provisioner "remote-exec" {
-      script = "./jenkins-master.sh"
+        inline = [
+            "bash -x /tmp/jenkins-master.sh '${tls_private_key.private-key.private_key_pem}' '${aws_instance.jenkins.*.public_dns[1]}'"
+        ]
     }
 
     provisioner "local-exec" {
@@ -104,7 +111,7 @@ resource "null_resource" "jenkins-node" {
       type        = "ssh"
       user        = "ubuntu"
       private_key = tls_private_key.private-key.private_key_pem
-      host        = aws_instance.jenkins.*.public_dns[0]
+      host        = aws_instance.jenkins.*.public_dns[1]
     }
 
     provisioner "remote-exec" {

@@ -1,3 +1,11 @@
+local private_key
+private_key="$1"
+shift
+
+local jenkins_node_dns
+jenkins_node_dns=($@)
+
+
 # Jenkins Installation
 wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
 echo 'deb https://pkg.jenkins.io/debian-stable binary/' | sudo tee /etc/apt/sources.list.d/jenkins.list
@@ -8,15 +16,14 @@ sudo service jenkins start
 sudo service jenkins status
 
 # Ansible Installation
-sudo apt update -y
 sudo apt install ansible -y
 
-echo "${tls_private_key.private-key.private_key_pem}" > ~/.ssh/jenkins.pem
+echo "${private_key}" > ~/.ssh/jenkins.pem
 chmod 600 ~/.ssh/jenkins.pem
 sudo sed -i '71s/.*/host_key_checking = False/' /etc/ansible/ansible.cfg
 
-cat << EOF >> hosts
+echo "setting up ${jenkins_node_dns[@]}"
+IFS='\n' cat << EOF >> hosts
 [jenkins]
-${aws_instance.jenkins.*.public_dns[1]}
-${aws_instance.jenkins.*.public_dns[2]}
+${jenkins_node_dns[@]}
 EOF
