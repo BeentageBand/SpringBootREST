@@ -93,10 +93,11 @@ resource "null_resource" "jenkins-master" {
         destination = "/tmp/jenkins-master.sh"
     }
 
-
     provisioner "remote-exec" {
         inline = [
-            "bash -x /tmp/jenkins-master.sh '${tls_private_key.private-key.private_key_pem}' '${aws_instance.jenkins.*.public_dns[1]}'"
+            "bash -x /tmp/jenkins-master.sh '${aws_instance.jenkins.*.public_dns[1]}'",
+            "echo '${tls_private_key.private-key.private_key_pem}' > ~/.ssh/jenkins.pem",
+            "chmod 600 ~/.ssh/jenkins.pem"
         ]
     }
 
