@@ -3,11 +3,6 @@ output "private-key" {
   sensitive = true
 }
 
-output "jenkins-password" {
-    value = ""
-    sensitive = true
-}
-
 output "public-key-openssh" {
   value = tls_private_key.private-key.public_key_openssh
 }

@@ -116,8 +116,17 @@ resource "null_resource" "jenkins-node" {
       host        = aws_instance.jenkins.*.public_dns[1]
     }
 
+    provisioner "file" {
+        source      = "${path.cwd}/jenkins-node.sh"
+        destination = "/tmp/jenkins-node.sh"
+    }
+
     provisioner "remote-exec" {
-      script = "./jenkins-node.sh"
+      inline =[
+        "bash -x /tmp/jenkins-node.sh",
+        "echo '${tls_private_key.private-key.private_key_pem}' > ~/.ssh/jenkins.pem",
+        "chmod 600 ~/.ssh/jenkins.pem"
+      ] 
     }
 
     provisioner "local-exec" {
