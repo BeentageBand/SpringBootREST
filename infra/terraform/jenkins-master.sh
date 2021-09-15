@@ -9,6 +9,13 @@ sudo apt install -y jenkins
 sudo service jenkins start
 sudo service jenkins status
 
+echo '[jenkins]' > ~/hosts
+for public_dns in $@;
+do
+    echo "${public_dns}" >> ~/hosts
+done
+
+
 # Ansible Installation
 sudo apt install ansible -y
 sudo sed -i '71s/.*/host_key_checking = False/' /etc/ansible/ansible.cfg

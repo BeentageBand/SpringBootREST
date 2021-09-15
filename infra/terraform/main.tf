@@ -95,6 +95,7 @@ resource "null_resource" "jenkins-master" {
 
     provisioner "remote-exec" {
         inline = [
+            "chmod u+x /tmp/jenkins-node.sh",
             "/tmp/jenkins-master.sh",
             "echo '[webservers]' > ~/hosts",
             "echo '${aws_instance.jenkins.*.public_dns[1]}' >> ~/hosts",
@@ -119,6 +120,7 @@ resource "null_resource" "jenkins-node" {
 
     provisioner "remote-exec" {
       inline =[
+        "chmod u+x /tmp/jenkins-node.sh",
         "/tmp/jenkins-node.sh",
       ] 
     }
