@@ -68,7 +68,7 @@ resource "aws_security_group_rule" "create-sgr-outbound" {
 }
 
 resource "aws_instance" "jenkins" {
-  count         = 3 
+  count         = 2
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   key_name      = aws_key_pair.deployer.key_name
@@ -95,7 +95,9 @@ resource "null_resource" "jenkins-master" {
 
     provisioner "remote-exec" {
         inline = [
-            "bash -x /tmp/jenkins-master.sh '${aws_instance.jenkins.*.public_dns[1]}'",
+            "/tmp/jenkins-master.sh",
+            "echo '[webservers]' > ~/hosts",
+            "echo '${aws_instance.web.*.public_dns[1]}' >> ~/hosts",
             "echo '${tls_private_key.private-key.private_key_pem}' > ~/.ssh/jenkins.pem",
             "chmod 600 ~/.ssh/jenkins.pem"
         ]
@@ -123,7 +125,7 @@ resource "null_resource" "jenkins-node" {
 
     provisioner "remote-exec" {
       inline =[
-        "bash -x /tmp/jenkins-node.sh",
+        "/tmp/jenkins-node.sh",
         "echo '${tls_private_key.private-key.private_key_pem}' > ~/.ssh/jenkins.pem",
         "chmod 600 ~/.ssh/jenkins.pem"
       ] 

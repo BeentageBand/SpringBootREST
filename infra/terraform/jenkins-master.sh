@@ -1,7 +1,5 @@
-local jenkins_node_dns
-jenkins_node_dns=($@)
-
-
+# !/bin/bash
+set -x
 # Jenkins Installation
 wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
 echo 'deb https://pkg.jenkins.io/debian-stable binary/' | sudo tee /etc/apt/sources.list.d/jenkins.list
@@ -14,9 +12,3 @@ sudo service jenkins status
 # Ansible Installation
 sudo apt install ansible -y
 sudo sed -i '71s/.*/host_key_checking = False/' /etc/ansible/ansible.cfg
-
-echo "setting up ${jenkins_node_dns[@]}"
-IFS='\n' cat << EOF >> hosts
-[jenkins]
-${jenkins_node_dns[@]}
-EOF
