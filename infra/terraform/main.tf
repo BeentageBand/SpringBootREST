@@ -97,7 +97,7 @@ resource "null_resource" "jenkins-master" {
         inline = [
             "/tmp/jenkins-master.sh",
             "echo '[webservers]' > ~/hosts",
-            "echo '${aws_instance.web.*.public_dns[1]}' >> ~/hosts",
+            "echo '${aws_instance.jenkins.*.public_dns[1]}' >> ~/hosts",
             "echo '${tls_private_key.private-key.private_key_pem}' > ~/.ssh/jenkins.pem",
             "chmod 600 ~/.ssh/jenkins.pem"
         ]
