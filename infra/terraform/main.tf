@@ -126,7 +126,7 @@ resource "null_resource" "jenkins-node" {
 
 resource "null_resource" "jenkins-pem" {
    depends_on = [aws_instance.jenkins]
-    count = length(aws_jenkins.*.public_dns)
+    count = length(aws_instance.jenkins.*.public_dns)
     connection {
       type        = "ssh"
       user        = "ubuntu"
