@@ -95,11 +95,16 @@ resource "null_resource" "jenkins-master" {
 
     provisioner "remote-exec" {
         inline = [
-            "chmod u+x /tmp/jenkins-node.sh",
-            "/tmp/jenkins-master.sh",
-            "echo '[webservers]' > ~/hosts",
-            "echo '${aws_instance.jenkins.*.public_dns[1]}' >> ~/hosts",
+          "chmod u+x /tmp/jenkins-node.sh",
+          "/tmp/jenkins-master.sh '${join(" ",aws_instance.jenkins.*.public_dns)}'",
+          "echo '${tls_private_key.private-key.private_key_pem}' > ~/.ssh/jenkins.pem && chmod 600 ~/.ssh/jenkins.pem",
+          "echo '[jenkins]' > ~/hosts",
+          "echo '${join("\n", aws_instance.jenkins.*.public_dns)}' > ~/hosts"
         ]
+    }
+
+    provisioner "local-exec" {
+      command = "echo '${tls_private_key.private-key.private_key_pem}' > ~/.ssh/jenkins.pem && chmod 600 ~/.ssh/jenkins.pem "
     }
 }
 
@@ -122,26 +127,7 @@ resource "null_resource" "jenkins-node" {
       inline =[
         "chmod u+x /tmp/jenkins-node.sh",
         "/tmp/jenkins-node.sh",
-      ] 
-    }
-}
-
-resource "null_resource" "jenkins-pem" {
-   depends_on = [aws_instance.jenkins]
-    count = length(aws_instance.jenkins.*.public_dns)
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      private_key = tls_private_key.private-key.private_key_pem
-      host        = aws_instance.jenkins.*.public_dns[count.index]
-    }
-
-    provisioner "remote-exec" {
-      inline =[
         "echo '${tls_private_key.private-key.private_key_pem}' > ~/.ssh/jenkins.pem && chmod 600 ~/.ssh/jenkins.pem"
-      ]
-    }
-    provisioner "local-exec" {
-      command = "echo '${tls_private_key.private-key.private_key_pem}' > ~/.ssh/jenkins.pem && chmod 600 ~/.ssh/jenkins.pem "
+      ] 
     }
 }
