@@ -96,7 +96,7 @@ resource "null_resource" "jenkins-master" {
     provisioner "remote-exec" {
         inline = [
           "chmod u+x /tmp/jenkins-master.sh",
-          "/tmp/jenkins-master.sh '${join(" ",aws_instance.jenkins.*.public_dns)}'",
+          "/tmp/jenkins-master.sh",
           "echo '[jenkins]' > ~/hosts",
           "echo '${join("\n", aws_instance.jenkins.*.public_dns)}' > ~/hosts"
         ]
