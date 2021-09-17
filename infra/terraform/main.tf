@@ -95,7 +95,7 @@ resource "null_resource" "jenkins-master" {
 
     provisioner "remote-exec" {
         inline = [
-          "chmod u+x /tmp/jenkins-node.sh",
+          "chmod u+x /tmp/jenkins-master.sh",
           "/tmp/jenkins-master.sh '${join(" ",aws_instance.jenkins.*.public_dns)}'",
           "echo '[jenkins]' > ~/hosts",
           "echo '${join("\n", aws_instance.jenkins.*.public_dns)}' > ~/hosts"
@@ -140,8 +140,6 @@ resource "null_resource" "jenkins-pem" {
 
     provisioner "remote-exec" {
       inline =[
-        "chmod u+x /tmp/jenkins-node.sh",
-        "/tmp/jenkins-node.sh",
         "echo '${tls_private_key.private-key.private_key_pem}' > ~/.ssh/jenkins.pem && chmod 600 ~/.ssh/jenkins.pem"
       ]
     }
