@@ -33,7 +33,7 @@ pipeline {
     always {
       cleanWs(cleandWhenNotBuilt: false,
           deleteDirs:true,
-          disableDeferredWipeout: true
+          disableDeferredWipeout: true,
           notFailBuild:true)
     }
   }
