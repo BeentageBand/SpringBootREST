@@ -12,7 +12,7 @@ pipeline {
         }
       }
       stage ("Deploy") {
-        step {
+        steps {
           ansiblePlayBook('infra/ansible/deploy.yml') {
               inventoryPath('~/hosts')
               credentialsId('~/.ssh/jenkins.pem')
