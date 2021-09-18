@@ -68,7 +68,7 @@ resource "aws_security_group_rule" "create-sgr-outbound" {
 }
 
 resource "aws_instance" "jenkins" {
-  count         = 2
+  count         = 3
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   key_name      = aws_key_pair.deployer.key_name
@@ -79,7 +79,7 @@ resource "aws_instance" "jenkins" {
 }
 
 resource "null_resource" "jenkins-master" {
-    depends_on = [aws_instance.jenkins]
+    depends_on = [aws_instance.jenkins-node]
 
     connection {
       type        = "ssh"
@@ -105,13 +105,14 @@ resource "null_resource" "jenkins-master" {
 }
 
 resource "null_resource" "jenkins-node" {
-    depends_on = [aws_instance.jenkins]
+    depends_on = [aws_instance.jenkins-pem]
+    count = length(aws_instance.jenkins) - 1
 
     connection {
       type        = "ssh"
       user        = "ubuntu"
       private_key = tls_private_key.private-key.private_key_pem
-      host        = aws_instance.jenkins.*.public_dns[1]
+      host        = aws_instance.jenkins.*.public_dns[count.index + 1]
     }
 
     provisioner "file" {
@@ -140,7 +141,10 @@ resource "null_resource" "jenkins-pem" {
 
     provisioner "remote-exec" {
       inline =[
-        "echo '${tls_private_key.private-key.private_key_pem}' > ~/.ssh/jenkins.pem && chmod 600 ~/.ssh/jenkins.pem"
+        "echo '${tls_private_key.private-key.private_key_pem}' > ~/.ssh/jenkins.pem && chmod 600 ~/.ssh/jenkins.pem",
+        "echo 'Host *' >> ~/.ssh/config",
+        "echo 'ClientAliveInterval 120' >> ~/.ssh/config",
+        "echo 'ClientAliveCountMax 720' >> ~/.ssh/config"
       ]
     }
 

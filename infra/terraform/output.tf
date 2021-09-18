@@ -14,3 +14,7 @@ output "jenkins-0" {
 output "jenkins-1" {
   value = aws_instance.jenkins.*.public_ip[1]
 }
+
+output "jenkins-2" {
+  value = aws_instance.jenkins.*.public_ip[2]
+}
