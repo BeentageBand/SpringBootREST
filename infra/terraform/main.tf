@@ -97,8 +97,10 @@ resource "null_resource" "jenkins-master" {
         inline = [
           "chmod u+x /tmp/jenkins-master.sh",
           "/tmp/jenkins-master.sh",
+          "sudo apt install ansible -y",
+          "sudo sed -i '71s/.*/host_key_checking = False/' /etc/ansible/ansible.cfg",
           "echo '[jenkins]' > ~/hosts",
-          "echo '${join("\n", aws_instance.jenkins.*.public_dns)}' > ~/hosts"
+          "echo '${join("\n", aws_instance.jenkins.*.public_dns)}' >> ~/hosts"
         ]
     }
 
@@ -144,7 +146,7 @@ resource "null_resource" "jenkins-pem" {
         "echo '${tls_private_key.private-key.private_key_pem}' > ~/.ssh/jenkins.pem && chmod 600 ~/.ssh/jenkins.pem",
         "echo 'Host *' >> ~/.ssh/config",
         "echo 'ClientAliveInterval 120' >> ~/.ssh/config",
-        "echo 'ClientAliveCountMax 720' >> ~/.ssh/config"
+        "echo 'ClientAliveCountMax 10' >> ~/.ssh/config"
       ]
     }
 

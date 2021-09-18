@@ -7,8 +7,5 @@ sudo apt update -y
 sudo apt install -y maven openjdk-8-jre openjdk-11-jdk
 sudo apt install -y jenkins
 sudo service jenkins start
-sudo service jenkins status
 
-# Ansible Installation
-sudo apt install ansible -y
-sudo sed -i '71s/.*/host_key_checking = False/' /etc/ansible/ansible.cfg
+
