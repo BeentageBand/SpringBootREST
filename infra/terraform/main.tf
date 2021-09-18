@@ -145,9 +145,6 @@ resource "null_resource" "jenkins-pem" {
     provisioner "remote-exec" {
       inline =[
         "echo '${tls_private_key.private-key.private_key_pem}' > ~/.ssh/jenkins.pem && chmod 600 ~/.ssh/jenkins.pem",
-        "echo 'Host *' >> ~/.ssh/config",
-        "echo 'ClientAliveInterval 120' >> ~/.ssh/config",
-        "echo 'ClientAliveCountMax 10' >> ~/.ssh/config"
       ]
     }
 
