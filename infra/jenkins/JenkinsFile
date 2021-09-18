@@ -1,0 +1,25 @@
+pipeline {
+  agent any
+    stages {
+      stage ("Compile") {
+        steps {
+          sh "mvn compile"
+        }
+      }
+      stage ("Test") {
+        steps {
+          sh "mvn test"
+        }
+      }
+      stage ("Deploy") {
+        step {
+          ansiblePlayBook('infra/ansible/deploy.yml') {
+              inventoryPath('~/hosts')
+              credentialsId('~/.ssh/jenkins.pem')
+              tags('SpringBootREST')
+              becomeUser('ubuntu')
+          }
+        }
+      }
+    }
+}
