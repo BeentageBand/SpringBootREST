@@ -25,7 +25,6 @@ pipeline {
             inventory: '~/hosts',
             limit: 'jenkins',
             playbook: 'infra/ansible/deploy.yml')
-        }
       }
     }
   }
