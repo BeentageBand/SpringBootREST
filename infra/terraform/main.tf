@@ -79,7 +79,7 @@ resource "aws_instance" "jenkins" {
 }
 
 resource "null_resource" "jenkins-master" {
-    depends_on = [aws_instance.jenkins-node]
+    depends_on = [null_resource.jenkins-node]
 
     connection {
       type        = "ssh"
@@ -105,7 +105,7 @@ resource "null_resource" "jenkins-master" {
 }
 
 resource "null_resource" "jenkins-node" {
-    depends_on = [aws_instance.jenkins-pem]
+    depends_on = [null_resource.jenkins-pem]
     count = length(aws_instance.jenkins) - 1
 
     connection {
