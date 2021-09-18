@@ -1,26 +1,40 @@
 pipeline {
   agent any
-    stages {
-      stage ("Compile") {
-        steps {
-          git branch: 'main', url: 'https://github.com/BeentageBand/SpringBootREST'
-          sh "mvn compile"
-        }
+  options {
+    // This is required if you want to clean before build
+    skipDefaultCheckout(true)
+  }
+  stages {
+    stage ("Compile") {
+      steps {
+        cleanWs()
+        git branch: 'main', url: 'https://github.com/BeentageBand/SpringBootREST'
+        sh "mvn compile"
       }
-      stage ("Test") {
-        steps {
-          sh "mvn test"
-        }
+    }
+    stage ("Test") {
+      steps {
+        sh "mvn test"
       }
-      stage ("Deploy") {
-        steps {
-          ansiblePlayBook('infra/ansible/deploy.yml') {
-              inventoryPath('~/hosts')
-              credentialsId('~/.ssh/jenkins.pem')
-              tags('SpringBootREST')
-              becomeUser('ubuntu')
-          }
+    }
+    stage ("Deploy") {
+      steps {
+        ansiblePlayBook('infra/ansible/deploy.yml') {
+            inventoryPath('~/hosts')
+            credentialsId('~/.ssh/jenkins.pem')
+            tags('SpringBootREST')
+            becomeUser('ubuntu')
         }
       }
     }
+  }
+  post {
+    // Clean after Build
+    always {
+      cleanWs(cleandWhenNotBuilt: false,
+          deleteDirs:true,
+          disableDeferredWipeout: true
+          notFailBuild:true)
+    }
+  }
 }
