@@ -4,7 +4,7 @@
   become_method: sudo
   remote_user: ubuntu
 
-  task:
+  tasks:
   - name: Update apt and
     apt:
       update_cache:yes
