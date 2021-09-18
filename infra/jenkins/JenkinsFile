@@ -19,11 +19,12 @@ pipeline {
     }
     stage ("Deploy") {
       steps {
-        ansiblePlaybook('infra/ansible/deploy.yml') {
-            inventoryPath('~/hosts')
-            credentialsId('~/.ssh/jenkins.pem')
-            tags('SpringBootREST')
-            becomeUser('ubuntu')
+        ansiblePlaybook(become: true,
+            becomeUser: 'ubuntu',
+            credentialsId: '~/.ssh/jenkins.pem',
+            inventory: '~/hosts',
+            limit: 'jenkins',
+            playbook: 'infra/ansible/deploy.yml')
         }
       }
     }
