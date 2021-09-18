@@ -21,7 +21,6 @@ pipeline {
       steps {
         ansiblePlaybook(become: true,
             becomeUser: 'ubuntu',
-            credentialsId: '~/.ssh/jenkins.pem',
             inventory: '~/hosts',
             limit: 'jenkins',
             playbook: 'infra/ansible/deploy.yml')

@@ -98,7 +98,8 @@ resource "null_resource" "jenkins-master" {
           "chmod u+x /tmp/jenkins-master.sh",
           "/tmp/jenkins-master.sh",
           "sudo apt install ansible -y",
-          "sudo sed -i '71s/.*/host_key_checking = False/' /etc/ansible/ansible.cfg",
+          "sudo sed -i '71s;.*;host_key_checking = False;' /etc/ansible/ansible.cfg",
+          "sudo sed -i '136s;.*;private_key= /home/ubuntu/.ssh/jenkins.pem;' /etc/ansible/ansible.cfg",
           "echo '[jenkins]' > ~/hosts",
           "echo '${join("\n", aws_instance.jenkins.*.public_dns)}' >> ~/hosts"
         ]
