@@ -8,7 +8,8 @@ pipeline {
     stage ("Compile") {
       steps {
         cleanWs()
-        git branch: 'main', url: 'https://github.com/BeentageBand/SpringBootREST'
+        git(branch: 'main', 
+            url: 'https://github.com/BeentageBand/SpringBootREST')
         sh "mvn compile"
       }
     }
@@ -19,6 +20,8 @@ pipeline {
     }
     stage ("Deploy") {
       steps {
+        git(branch: 'infra-ansible', 
+            url: 'https://github.com/BeentageBand/SpringBootREST')
         ansiblePlaybook(become: true,
             becomeUser: 'ubuntu',
             inventory: '~/hosts',
