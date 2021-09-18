@@ -3,6 +3,7 @@ pipeline {
     stages {
       stage ("Compile") {
         steps {
+          git branch: 'main', url: 'https://github.com/BeentageBand/SpringBootREST'
           sh "mvn compile"
         }
       }
