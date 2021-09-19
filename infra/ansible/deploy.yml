@@ -24,8 +24,7 @@
     user:
       name: tomcat
       group: tomcat
-      home: /user/share/tomcat
-      createHome: no
+
   - name: create /opt/tomcat
     file:
       path: /opt/tomcat
