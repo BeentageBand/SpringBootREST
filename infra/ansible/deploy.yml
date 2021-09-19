@@ -11,22 +11,6 @@
       update_cache: yes
       cache_valid_time: 86400 # One day
 
-  - name: install JDK 11
-    apt:
-      name: openjdk-11-jre-headless
-      state: present
-
-  - name: install unzip
-    apt:
-      name: unzip
-      state: present
-
-  - name: download and unarchive
-    unarchive:
-      src: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.53/bin/apache-tomcat-9.0.53.zip
-      dest: /usr/local/
-      remote_src: yes
-
       #  - name: Unzip WAR file
       #    unarchive:
       #      src: target/demo-0.0.1-SNAPSHOT.war
@@ -34,12 +18,3 @@
       #      copy: no
       #      owner: tomcat
       #      groupt: tomcat
-
-  - name: Start and enable tomcat service
-    shell: '/usr/local/apache-tomcat-9.0.53'
-
-  - name: wait for tomcat to start
-    wait_for:
-      port: 8080
-      timeout: 60
-
