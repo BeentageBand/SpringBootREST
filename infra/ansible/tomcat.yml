@@ -11,8 +11,8 @@
 
   - name: install unzip
     apt:
-    name: unzip
-    state: present
+      name: unzip
+      state: present
 
   - name: download and extract tomcat packages
     unarchive:
