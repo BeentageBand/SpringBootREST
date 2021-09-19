@@ -22,10 +22,7 @@ pipeline {
       steps {
         git(branch: 'infra-ansible', 
             url: 'https://github.com/BeentageBand/SpringBootREST')
-        ansiblePlaybook(become: true,
-            becomeUser: 'ubuntu',
-            inventory: '/home/ubuntu/hosts',
-            limit: 'jenkins',
+        ansiblePlaybook(inventory: '/home/ubuntu/hosts',
             playbook: 'infra/ansible/deploy.yml')
       }
     }
