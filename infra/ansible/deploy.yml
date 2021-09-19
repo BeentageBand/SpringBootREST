@@ -16,6 +16,11 @@
       name: openjdk-11-jdk
       state: present
 
+  - name: install unzip
+    apt:
+      name: unzip
+      state: present
+
   - name : add tomcat group
     group:
       name: tomcat
