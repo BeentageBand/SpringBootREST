@@ -24,7 +24,5 @@
 
   handlers:
     - name: restart tomcat
-      service:
-        name: tomcat
-        state: restarted
+      shell: nohup /usr/local/tomcat/bin/catalina.sh &
   
