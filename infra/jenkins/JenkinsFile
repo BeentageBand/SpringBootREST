@@ -22,6 +22,7 @@ pipeline {
       steps {
         git(branch: 'infra-ansible', 
             url: 'https://github.com/BeentageBand/SpringBootREST')
+        sh 'mv target/ infra/ansible/'
         sh 'ansible-playbook --private-key /home/ubuntu/.ssh/jenkins.pem -i /home/ubuntu/hosts infra/ansible/tomcat.yml'
         sh 'ansible-playbook --private-key /home/ubuntu/.ssh/jenkins.pem -i /home/ubuntu/hosts infra/ansible/deploy.yml'
       }
