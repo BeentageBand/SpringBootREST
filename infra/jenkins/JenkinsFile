@@ -24,7 +24,7 @@ pipeline {
             url: 'https://github.com/BeentageBand/SpringBootREST')
         ansiblePlaybook(become: true,
             becomeUser: 'ubuntu',
-            inventory: '~/hosts',
+            inventory: '/home/ubuntu/hosts',
             limit: 'jenkins',
             playbook: 'infra/ansible/deploy.yml')
       }
