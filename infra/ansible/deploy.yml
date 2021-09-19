@@ -17,16 +17,8 @@
   - name: Upload WAR file
     copy:
       src: ../../target/demo-0.0.1-SNAPSHOT.war # relative 
-      dest: /home/ubuntu/demo-0.0.1-SNAPSHOT.war
+      dest: /usr/local/tomcat/webapps/demo.war
       backup: yes
-
-  - name: Unzip WAR file
-    unarchive:
-      src: /home/ubuntu/demo-0.0.1-SNAPSHOT.war
-      dest: /usr/local/tomcat/webapps/
-      copy: no
-    notify:
-      - restart tomcat
 
   handlers:
     - name: restart tomcat
