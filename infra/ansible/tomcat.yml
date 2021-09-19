@@ -9,16 +9,14 @@
     apt:
       name: openjdk-11-jre-headless
 
-  - name: install unzip
-    apt:
-      name: unzip
-      state: present
-
   - name: download and extract tomcat packages
     unarchive:
-      src: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.53/bin/apache-tomcat-9.0.53.zip
+      src: https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.71/bin/apache-tomcat-8.5.71.tar.gz
       dest: /usr/local
       remote_src: yes
 
+  - name: Rename apache tomcat version
+    command: mv /usr/local/apache-tomcat-8.5.71/ /usr/local/tomcat/
+    
   - name: start tomcat services
-    shell: nohup /usr/local/apache-tomcat-9.0.53/bin/startup.sh
+    shell: nohup /usr/local/tomcat/bin/startup.sh
