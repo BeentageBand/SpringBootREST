@@ -11,13 +11,20 @@
       update_cache: yes
       cache_valid_time: 86400 # One day
 
+  - name: Upload WAR file
+    copy:
+      src: target/demo-0.0.1-SNAPSHOT.war
+      dest: /home/ubuntu/demo-0.0.1-SNAPSHOT.war
+      backup: yes
+
   - name: Unzip WAR file
     unarchive:
-      src: target/demo-0.0.1-SNAPSHOT.war
-      dest: /usr/local/tomcat/webapps/demo-0.0.1-SNAPSHOT.war
+      src: home/ubuntu/demo-0.0.1-SNAPSHOT.war
+      dest: /usr/local/tomcat/webapps/demo-0.0.1-SNAPSHOT/
       copy: no
     notify:
       - restart tomcat
+
   handlers:
     - name: restart tomcat
       service:
