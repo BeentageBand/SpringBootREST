@@ -13,7 +13,7 @@
 
   - name: install JDK 11
     apt:
-      name: openjdk-11-jdk
+      name: openjdk-11-jre-headless
       state: present
 
   - name: install unzip
@@ -21,43 +21,19 @@
       name: unzip
       state: present
 
-  - name : add tomcat group
-    group:
-      name: tomcat
-
-  - name: add tomcat user
-    user:
-      name: tomcat
-      group: tomcat
-
-  - name: create /opt/tomcat
-    file:
-      path: /opt/tomcat
-      state: directory
-      mode: 0755
-
   - name: download and unarchive
     unarchive:
       src: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.53/bin/apache-tomcat-9.0.53.zip
-      dest: /opt/tomcat
+      dest: /usr/local/
       remote_src: yes
 
-  - name: Change ownership
-    file:
-      path: /opt/tomcat
-      owner: tomcat
-      group: tomcat
-      mode: "u+rwx,g+rx,o=rx"
-      recurse: yes
-      state: directory
-
-  - name: Unzip WAR file
-    unarchive:
-      src: target/demo-0.0.1-SNAPSHOT.war
-      dest: /usr/local/tomcat/webapps/demo-0.0.1-SNAPSHOT.war
-      copy: no
-      owner: tomcat
-      groupt: tomcat
+      #  - name: Unzip WAR file
+      #    unarchive:
+      #      src: target/demo-0.0.1-SNAPSHOT.war
+      #      dest: /usr/local/tomcat/webapps/demo-0.0.1-SNAPSHOT.war
+      #      copy: no
+      #      owner: tomcat
+      #      groupt: tomcat
 
   - name: wait for tomcat to start
     wait_for:
@@ -65,9 +41,5 @@
       timeout: 60
 
   - name: Start and enable tomcat service
-    systemd:
-      name: tomcat
-      state: started
-      enabled: true
-      daemon_reload: true
+    shell: '/usr/local/apache-tomcat-9.0.53'
 
