@@ -16,7 +16,7 @@
 
   - name: Upload WAR file
     copy:
-      src: "'{{ lookup('env', 'WORKSPACE' )}}/target/demo-0.0.1-SNAPSHOT.war" # relative 
+      src: target/demo-0.0.1-SNAPSHOT.war # relative 
       dest: /home/ubuntu/webapps/demo.war
       owner: ubuntu
       mode: 'u+rwx,g+rwx,o+rwx'
