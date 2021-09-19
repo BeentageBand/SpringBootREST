@@ -11,10 +11,16 @@
       update_cache: yes
       cache_valid_time: 86400 # One day
 
-      #  - name: Unzip WAR file
-      #    unarchive:
-      #      src: target/demo-0.0.1-SNAPSHOT.war
-      #      dest: /usr/local/tomcat/webapps/demo-0.0.1-SNAPSHOT.war
-      #      copy: no
-      #      owner: tomcat
-      #      groupt: tomcat
+  - name: Unzip WAR file
+    unarchive:
+      src: target/demo-0.0.1-SNAPSHOT.war
+      dest: /usr/local/tomcat/webapps/demo-0.0.1-SNAPSHOT.war
+      copy: no
+    notify:
+      - restart tomcat
+  handlers:
+    - name: restart tomcat
+      service:
+        name: tomcat
+        state: restarted
+  
