@@ -5,6 +5,11 @@
   remote_user: ubuntu
 
   tasks:
+  - name: Update apt and
+    apt:
+      update_cache: yes
+      cache_valid_time: 86400 # One day
+
   - name: Install OpenJDK
     apt:
       name: openjdk-11-jre-headless

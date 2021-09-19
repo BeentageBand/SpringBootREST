@@ -10,6 +10,9 @@
     apt:
       update_cache: yes
       cache_valid_time: 86400 # One day
+  - name: Install unzip
+    apt:
+      name: unzip
 
   - name: Upload WAR file
     copy:
@@ -20,7 +23,7 @@
   - name: Unzip WAR file
     unarchive:
       src: /home/ubuntu/demo-0.0.1-SNAPSHOT.war
-      dest: /usr/local/tomcat/webapps/demo-0.0.1-SNAPSHOT/
+      dest: /usr/local/tomcat/webapps/
       copy: no
     notify:
       - restart tomcat
