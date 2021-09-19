@@ -9,11 +9,16 @@
     apt:
       name: openjdk-11-jre-headless
 
+  - name: install unzip
+    apt:
+    name: unzip
+    state: present
+
   - name: download and extract tomcat packages
     unarchive:
-      src: http://mirrors.estointernet.in/apache/tomcat/tomcat-9/v9.0.44/bin/apache-tomcat-9.0.44.tar.gz
+      src: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.53/bin/apache-tomcat-9.0.53.zip
       dest: /usr/local
       remote_src: yes
 
   - name: start tomcat services
-    shell: nohup /usr/local/apache-tomcat-9.0.44/bin/startup.sh
+    shell: nohup /usr/local/apache-tomcat-9.0.53/bin/startup.sh
