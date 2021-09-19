@@ -18,6 +18,8 @@
     copy:
       src: "'{{ lookup('env', 'WORKSPACE' )}}/target/demo-0.0.1-SNAPSHOT.war" # relative 
       dest: /usr/local/tomcat/webapps/demo.war
+      owner: ubuntu
+      mode: 'u+rwx,g+rwx,o+rwx'
       backup: yes
 
   handlers:
