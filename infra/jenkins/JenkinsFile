@@ -22,9 +22,7 @@ pipeline {
       steps {
         git(branch: 'infra-ansible', 
             url: 'https://github.com/BeentageBand/SpringBootREST')
-        ansiblePlaybook(inventory: '/home/ubuntu/hosts',
-            credentialsId: 'jenkin-pem',
-            playbook: 'infra/ansible/deploy.yml')
+        sh 'ansible-playbook --private-key /home/ubuntu/.ssh/jenkins.pem -i /home/ubuntu/hosts infra/ansible/deploy.yml'
       }
     }
   }
