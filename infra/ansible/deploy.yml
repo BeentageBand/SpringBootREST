@@ -4,6 +4,8 @@
   become: yes
   become_method: sudo
   remote_user: ubuntu
+  vars:
+    worskpace: {{ lookup('env', 'WORKSPACE') }}
 
   tasks:
   - name: Update apt and
@@ -16,7 +18,7 @@
 
   - name: Upload WAR file
     copy:
-      src: ../../target/demo-0.0.1-SNAPSHOT.war # relative 
+      src: '{{ workspace }}/target/demo-0.0.1-SNAPSHOT.war' # relative 
       dest: /usr/local/tomcat/webapps/demo.war
       backup: yes
 
