@@ -19,4 +19,4 @@
     command: mv /usr/local/apache-tomcat-8.5.71/ /usr/local/tomcat/
     
   - name: start tomcat services
-    shell: nohup /usr/local/tomcat/bin/startup.sh
+    shell: nohup /usr/local/tomcat/bin/startup.sh &
