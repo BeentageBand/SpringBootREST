@@ -79,7 +79,7 @@ resource "aws_instance" "jenkins" {
 }
 
 resource "null_resource" "jenkins-master" {
-    depends_on = [null_resource.jenkins-node]
+    depends_on = [null_resource.jenkins-pem]
 
     connection {
       type        = "ssh"
@@ -97,11 +97,6 @@ resource "null_resource" "jenkins-master" {
         inline = [
           "chmod u+x /tmp/jenkins-master.sh",
           "/tmp/jenkins-master.sh",
-          "sudo apt install ansible -y",
-          "sudo sed -i '71s;.*;host_key_checking = False;' /etc/ansible/ansible.cfg",
-          "sudo sed -i '136s;.*;private_key= ~/.ssh/jenkins.pem;' /etc/ansible/ansible.cfg",
-          "echo '[jenkins]' > ~/hosts",
-          "echo '${join("\n", aws_instance.jenkins.*.public_dns)}' >> ~/hosts"
         ]
     }
 
@@ -109,14 +104,14 @@ resource "null_resource" "jenkins-master" {
 
 resource "null_resource" "jenkins-node" {
     depends_on = [null_resource.jenkins-pem]
-    count = length(aws_instance.jenkins) - 1
 
     connection {
       type        = "ssh"
       user        = "ubuntu"
       private_key = tls_private_key.private-key.private_key_pem
-      host        = aws_instance.jenkins.*.public_dns[count.index + 1]
+      host        = aws_instance.jenkins.*.public_dns[1]
     }
+
 
     provisioner "file" {
         source      = "${path.cwd}/jenkins-node.sh"
@@ -124,10 +119,12 @@ resource "null_resource" "jenkins-node" {
     }
 
     provisioner "remote-exec" {
-      inline =[
-        "chmod u+x /tmp/jenkins-node.sh",
-        "/tmp/jenkins-node.sh",
-      ]
+        inline = [
+          "chmod u+x /tmp/jenkins-node.sh",
+          "/tmp/jenkins-node.sh",
+          "echo '[jenkins]' > ~/hosts",
+          "echo '${join("\n", aws_instance.jenkins.*.public_dns)}' >> ~/hosts"
+        ]
     }
 }
 
