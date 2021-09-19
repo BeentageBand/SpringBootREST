@@ -22,7 +22,7 @@
 
   - name: Rename apache tomcat version
     command: mv /usr/local/apache-tomcat-8.5.71/ /usr/local/tomcat/
-    when: tomcat_stat.exists == false
+    when: tomcat_stat.stat.exists == false
     
   - name: start tomcat services
     shell: nohup /usr/local/tomcat/bin/startup.sh &
