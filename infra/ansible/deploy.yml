@@ -51,11 +51,18 @@
       recurse: yes
       state: directory
 
-  - name: Copy tomcat service from local to remote
-    file:
-      src: tomcat.service
-      dest: /etc/systemd/system/
-      mode: 0755
+  - name: Unzip WAR file
+    unarchive:
+      src: target/demo-0.0.1-SNAPSHOT.war
+      dest: /usr/local/tomcat/webapps/demo-0.0.1-SNAPSHOT.war
+      copy: no
+      owner: tomcat
+      groupt: tomcat
+
+  - name: wait for tomcat to start
+    wait_for:
+      port: 8080
+      timeout: 60
 
   - name: Start and enable tomcat service
     systemd:
