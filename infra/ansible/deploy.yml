@@ -33,7 +33,7 @@
 
   - name: download and unarchive
     unarchive:
-      src: https://mirrors.estointernet.in/apache/tomcat/tomcat-9/v9.0.48/bin/apache-tomcat-9.0.48.zip
+      src: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.53/bin/apache-tomcat-9.0.53.zip
       dest: /opt/tomcat
       remote_src: yes
       extra_opts: [--strip-components=1]
