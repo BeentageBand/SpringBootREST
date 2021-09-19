@@ -17,7 +17,7 @@
   - name: Upload WAR file
     copy:
       src: target/demo-0.0.1-SNAPSHOT.war # relative 
-      dest: /home/ubuntu/demo.war
+      dest: /usr/local/tomcat/webapps/demo.war
       owner: ubuntu
       mode: 'u+rwx,g+rwx,o+rwx'
       backup: yes
