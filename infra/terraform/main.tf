@@ -123,7 +123,7 @@ resource "null_resource" "jenkins-node" {
           "chmod u+x /tmp/jenkins-node.sh",
           "/tmp/jenkins-node.sh",
           "echo '[jenkins]' > ~/hosts",
-          "echo '${join("\n", aws_instance.jenkins.*.public_dns)}' >> ~/hosts"
+          "echo '${aws_instance.jenkins.*.public_dns[2]}' >> ~/hosts"
         ]
     }
 }
